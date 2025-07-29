@@ -14,9 +14,18 @@ pipeline {
        //     sh "python3 -m py_compile ${SCRIPT}"
        //       }
        //}
+       stage('Install Dependencies') {
+            steps {
+                sh '''
+                    which python3 || sudo apt-get install -y python3
+                    which pip3 || sudo apt-get install -y python3-pip
+                    pip3 install --upgrade pip
+                    pip3 install netmiko
+                '''
+            }
+       }
        stage('Run Netmiko Script') {
               steps {
-            sh "pip install netmiko"
             sh "python3 ${SCRIPT}"
               }
        }
