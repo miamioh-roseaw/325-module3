@@ -1,4 +1,4 @@
-Before you begin this lab, you need to prepare your Jenkins-Server by opening a terminal and typing:
+<head>Before you begin this lab, you need to prepare your Jenkins-Server by opening a terminal and typing:</head>
 
   sudo apt install -y python3-pip
   
