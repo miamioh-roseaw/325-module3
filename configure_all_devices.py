@@ -1,7 +1,6 @@
 from netmiko import ConnectHandler
 
 devices = [
-       {'ip': '10.10.10.1', 'hostname': 'mgm-rtr'},
        {'ip': '10.10.10.2', 'hostname': 'reg-rtr'},
        {'ip': '10.10.10.3', 'hostname': 'ham-rtr'},
        {'ip': '10.10.10.4', 'hostname': 'mid-rtr'}
