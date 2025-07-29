@@ -16,6 +16,7 @@ pipeline {
        //}
        stage('Run Netmiko Script') {
               steps {
+            sh "pip install netmiko"
             sh "python3 ${SCRIPT}"
               }
        }
