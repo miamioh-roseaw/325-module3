@@ -12,7 +12,8 @@ pipeline {
             python3 -m site
             python3 -c "import sys; print(sys.path)"
             python3 -c "import netmiko; print(netmiko.__file__)"
-        '''
+            '''
+            }
         }
     }
     stage('Validate Script') {
