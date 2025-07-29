@@ -1,7 +1,11 @@
-**Before you begin this lab, you need to prepare your Jenkins-Server by opening a terminal and typing:**
+**Before you begin this lab, you need to add these credentials to Jenkins:**
 
-  sudo apt install -y python3-pip
-  
-  pip3 install --upgrade pip
-  
-  pip3 install netmiko
+Add Jenkins credentials as:
+
+Kind: Username with password
+
+ID: cisco-ssh-creds
+
+Username: student
+
+Password: Passw0rd!
