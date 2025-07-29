@@ -6,7 +6,7 @@ pipeline {
        stages {
        stage('Checkout') {
               steps {
-            git 'https://github.com/yourusername/325-module-labs.git'
+            git 'https://github.com/miamioh-roseaw/325-module2.git'
               }
        }
        stage('Validate Script') {
