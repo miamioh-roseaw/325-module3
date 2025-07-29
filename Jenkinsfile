@@ -3,16 +3,17 @@ pipeline {
 
     environment {
         SCRIPT = 'configure_all_devices.py'
+        PATH = "${HOME}/.local/bin:${env.PATH}"
+        PYTHONPATH = "${HOME}/.local/lib/python3.10/site-packages"
     }
 
     stages {
-        stage('Debug Python') {
+        stage('Install Netmiko') {
             steps {
                 sh '''
-                    which python3
-                    python3 -m site
-                    python3 -c "import sys; print(sys.path)"
-                    python3 -c "import netmiko; print(netmiko.__file__)"
+                    curl -sS https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+                    python3 get-pip.py --user
+                    pip3 install --user netmiko
                 '''
             }
         }
