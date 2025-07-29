@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Adjust the Python version folder below if not 3.10
         SCRIPT = 'configure_all_devices.py'
         PATH = "${HOME}/.local/bin:${env.PATH}"
         PYTHONPATH = "${HOME}/.local/lib/python3.10/site-packages"
@@ -12,39 +11,35 @@ pipeline {
         stage('Install pip and Netmiko') {
             steps {
                 sh '''
-                    # Make sure wget exists
-                    if ! command -v wget > /dev/null; then
-                        echo "wget not found. Please install wget manually or update this step.";
-                        exit 1
+                    # Ensure pip is available
+                    if ! command -v pip3 > /dev/null; then
+                        echo "[INFO] Bootstrapping pip..."
+                        if command -v wget > /dev/null; then
+                            wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py
+                        else
+                            echo "ERROR: wget not found. Install wget or manually place get-pip.py."
+                            exit 1
+                        fi
+                        python3 get-pip.py --user
                     fi
-
-                    # Download get-pip.py
-                    wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py
-
-                    # Install pip locally (no sudo)
-                    python3 get-pip.py --user
-
-                    # Install netmiko in user environment
-                    ${HOME}/.local/bin/pip3 install --user netmiko
-                '''
-            }
-        }
-
-        stage('Validate Script') {
-            steps {
-                sh '''
-                    export PATH=$HOME/.local/bin:$PATH
-                    export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
-                    python3 -m py_compile ${SCRIPT}
+                    
+                    # Upgrade pip and install netmiko
+                    ~/.local/bin/pip3 install --user --upgrade pip
+                    ~/.local/bin/pip3 install --user netmiko
                 '''
             }
         }
 
         stage('Run Netmiko Script') {
+            environment {
+                CISCO_CREDS = credentials('cisco-ssh-creds') // Jenkins credential ID
+            }
             steps {
                 sh '''
-                    export PATH=$HOME/.local/bin:$PATH
-                    export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
+                    echo "[INFO] Running Netmiko configuration script..."
+                    export CISCO_CREDS_USR="${CISCO_CREDS_USR}"
+                    export CISCO_CREDS_PSW="${CISCO_CREDS_PSW}"
+
                     python3 ${SCRIPT}
                 '''
             }
@@ -54,6 +49,13 @@ pipeline {
             steps {
                 echo '✅ Pipeline completed. Devices configured.'
             }
+        }
+    }
+
+    post {
+        always {
+            echo "[INFO] Archiving logs..."
+            archiveArtifacts artifacts: 'netmiko.log', allowEmptyArchive: true
         }
     }
 }
