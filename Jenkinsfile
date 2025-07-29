@@ -20,16 +20,14 @@ pipeline {
         sh "python3 -m py_compile ${SCRIPT}"
         }
     }
-        stage('Run Netmiko Script') {
-            steps {
-                sh "python3 ${SCRIPT}"
-            }
-        }
-
-        stage('Post Check') {
-            steps {
-                echo "Pipeline completed. Devices configured."
-            }
-        }
+    stage('Run Netmiko Script') {
+    steps {
+          sh "python3 ${SCRIPT}"
+         }
+    }
+   stage('Post Check') {
+   steps {
+          echo "Pipeline completed. Devices configured."
+          }
     }
 }
