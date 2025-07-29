@@ -23,6 +23,6 @@ pipeline {
        //       steps {
        //     sh 'echo "Pipeline completed. Devices configured."'
        //       }
-       }
+       //}
 }
 }
