@@ -3,17 +3,15 @@ pipeline {
 
     environment {
         SCRIPT = 'configure_all_devices.py'
-        VENV = 'venv'
+        PIP_BIN = "${HOME}/.local/bin"
     }
 
     stages {
-        stage('Setup Python Environment') {
+        stage('Install Netmiko') {
             steps {
                 sh '''
-                    python3 -m venv ${VENV}
-                    . ${VENV}/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
+                    python3 -m pip install --upgrade --user pip
+                    python3 -m pip install --user netmiko
                 '''
             }
         }
@@ -21,8 +19,8 @@ pipeline {
         stage('Validate Script') {
             steps {
                 sh '''
-                    . ${VENV}/bin/activate
-                    python -m py_compile ${SCRIPT}
+                    export PATH=$PIP_BIN:$PATH
+                    python3 -m py_compile ${SCRIPT}
                 '''
             }
         }
@@ -30,8 +28,8 @@ pipeline {
         stage('Run Script') {
             steps {
                 sh '''
-                    . ${VENV}/bin/activate
-                    python ${SCRIPT}
+                    export PATH=$PIP_BIN:$PATH
+                    python3 ${SCRIPT}
                 '''
             }
         }
