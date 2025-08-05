@@ -38,7 +38,7 @@ for device in devices:
         # Define the commands to send
         commands = [
             f"hostname {device['hostname']}",
-            "banner motd ^This device is managed by automation^"
+            "banner motd ^This device is managed by awesome automation by Anthony^"
         ]
 
         # Push the config
